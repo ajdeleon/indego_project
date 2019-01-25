@@ -1,0 +1,21 @@
+version: '3'
+services:
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api
+    environment:
+        - MONGO_INITDB_ROOT_USERNAME=mongo
+        - MONGO_INITDB_ROOT_PASSWORD=fd78fdsajfke
+    ports:
+      - '4000:4000'
+  mongodb:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./mongodb
+    environment:
+        - MONGO_INITDB_DATABASE=indego
+    volumes:
+      - ./mongodb/data:/data/db
+    ports:
+      - '27017:27017'
