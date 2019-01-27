@@ -1,0 +1,10 @@
+const mongoose = require('mongoose')
+const { Schema } = mongoose
+
+const testSchema = new Schema({
+  first_name: String,
+  last_name: String,
+  updated: Date,
+})
+
+mongoose.model('test', testSchema)
