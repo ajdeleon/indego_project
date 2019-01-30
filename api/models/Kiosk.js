@@ -10,6 +10,7 @@ const kiosk = new Schema({
   latitude: Number,
   longitude: Number,
   kioskId: Number,
+  weather: { type: Schema.Types.ObjectId, ref: 'weather' },
 })
 
 mongoose.model('kiosk', kiosk)
