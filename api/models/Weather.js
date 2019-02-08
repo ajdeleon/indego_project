@@ -3,7 +3,6 @@ const { Schema } = mongoose
 
 const weatherSchema = new Schema(
   {
-    _id: Schema.Types.ObjectId,
     temp: Number,
     pressure: Number,
     humidity: Number,
