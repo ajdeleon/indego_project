@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
 require('./routes/kioskRoutes')(app)
 require('./routes/weatherRoutes')(app)
 require('./services/updateDatabase.js')()
-const date = new Date(Date.now())
-console.log('cron running at: ', date)
 
 const port = 4000
 app.listen(port, () => {
