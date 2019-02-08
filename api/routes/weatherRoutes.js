@@ -2,34 +2,27 @@ const mongoose = require('mongoose')
 const Weather = mongoose.model('weather')
 
 module.exports = app => {
-  app.get('/weather', async (req, res) => {
+  app.get('/weather/:id', async (req, res) => {
+    const id = req.params.id
     try {
-      const result = Weather.find({ id: 4560349 })
-      res.send('Hello')
+      const result = await Weather.findById(id)
+      res.send(result)
     } catch (err) {
-      res.status(422).send(err)
+      res.status(422).send(err.message)
     }
   })
 
   app.post('/weather', async (req, res) => {
     const weather = new Weather({
       ...req.body,
+      ...req.body.main,
     })
 
     try {
       const result = await weather.save()
-      res.send(result)
+      res.send('Weather saved successfully: ' + result)
     } catch (err) {
       res.status(422).send(err)
     }
   })
-
-  // app.post('/testMany', async (req, res) => {
-  //   try {
-  //     const result = await Test.insertMany(req.body, { ordered: false })
-  //     res.send(result)
-  //   } catch (err) {
-  //     res.status(422).send(err)
-  //   }
-  // })
 }
