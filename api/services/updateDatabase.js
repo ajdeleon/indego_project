@@ -14,7 +14,7 @@ updater = async () => {
     const weather = new Weather({
       _id: new mongoose.Types.ObjectId(),
       ...weatherData.main,
-      ...weatherData.weather,
+      weather: [...weatherData.weather],
     })
     const kioskDataWithRef = kioskData.map(kiosk => {
       return { ...kiosk, weather: weather._id }
@@ -31,9 +31,9 @@ updater = async () => {
 
 module.exports = () => {
   // run this job every hour on the 0 minute
-  const date = new Date(Date.now())
   cron.schedule('0 * * * *', () => {
+    const date = new Date(Date.now())
     console.log('cron running at: ', date)
-    //updater()
+    updater()
   })
 }
