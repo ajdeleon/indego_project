@@ -7,7 +7,7 @@ module.exports = app => {
     try {
       const result = await Weather.findById(id)
       if (result === null) {
-        return res.status(404).send({ error: 'No suitable data available' })
+        return res.status(404).send({ error: 'no suitable data available' })
       }
       res.send(result)
     } catch (err) {

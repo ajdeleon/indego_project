@@ -28,7 +28,7 @@ describe('/GET weather/:id', () => {
       .end((err, res) => {
         res.should.have.status(404)
         res.body.should.be.a('object')
-        res.body.should.have.property('error').eql('No suitable data available')
+        res.body.should.have.property('error').eql('no suitable data available')
         done()
       })
   })
