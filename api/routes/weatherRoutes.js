@@ -6,9 +6,12 @@ module.exports = app => {
     const id = req.params.id
     try {
       const result = await Weather.findById(id)
+      if (result === null) {
+        return res.status(404).send({ error: 'No suitable data available' })
+      }
       res.send(result)
     } catch (err) {
-      res.status(422).send(err.message)
+      res.status(422).send({ error: 'id is not a valid mongo ObjectId' })
     }
   })
 
@@ -20,7 +23,7 @@ module.exports = app => {
 
     try {
       const result = await weather.save()
-      res.send('Weather saved successfully: ' + result)
+      res.send(result)
     } catch (err) {
       res.status(422).send(err)
     }
