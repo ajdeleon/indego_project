@@ -81,7 +81,6 @@ describe('/GET stations?at=TIMESTAMP', () => {
         .request(server)
         .get(`/stations/${stationId}?from=${fromTimestamp}&to=${toTimestamp}`)
         .end((err, res) => {
-          console.log(res)
           res.should.have.status(404)
           res.body.should.be.a('object')
           res.body.should.have.property('error').eql('no suitable data')
