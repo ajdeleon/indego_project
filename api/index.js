@@ -1,10 +1,14 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 require('./models/Kiosk')
 require('./models/Weather')
+require('./models/CurrentKiosk')
 
 const app = new express()
+
+app.use(cors())
 app.use(bodyParser.json())
 
 mongoose.connect(

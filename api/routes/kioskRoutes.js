@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Kiosk = mongoose.model('kiosk')
+const CurrentKiosk = mongoose.model('currentKiosk')
 const Weather = mongoose.model('weather')
 const parseParams = require('../middlewares/parseParams')
 const requireAt = require('../middlewares/requireAt')
@@ -16,6 +17,20 @@ module.exports = app => {
       res.send({
         at: weather.at,
         stations: [...kiosks],
+        weather,
+      })
+    } catch (err) {
+      res.status(422).send(err.message)
+    }
+  })
+
+  app.get('/stations/recent', async (req, res) => {
+    try {
+      const kiosks = await CurrentKiosk.find({})
+      const weather = await Weather.findById(kiosks[0].weather)
+      res.send({
+        at: weather.at,
+        kiosks,
         weather,
       })
     } catch (err) {
