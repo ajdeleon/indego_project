@@ -5,7 +5,7 @@ let weatherData
 
 // get data from api and load initial map markers
 axios.get('http://localhost:4000/stations/recent').then(data => {
-  kioskData = data.data.kiosks
+  kioskData = data.data.stations
   weatherData = data.data.weather
 
   // keep prev window reference so it can be cleared when another is clicked

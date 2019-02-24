@@ -30,7 +30,7 @@ module.exports = app => {
       const weather = await Weather.findById(kiosks[0].weather)
       res.send({
         at: weather.at,
-        kiosks,
+        stations: [...kiosks],
         weather,
       })
     } catch (err) {

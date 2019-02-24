@@ -10,6 +10,20 @@ const mongoObjectId = mongoose.Types.ObjectId()
 
 chai.use(chaiHttp)
 
+describe('/GET stations/recent', () => {
+  it('should return object with "at" timestamp, station data, and weather', done => {
+    chai
+      .request(server)
+      .get('/stations/recent')
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.be.an('object')
+        res.body.should.have.all.keys('at', 'stations', 'weather')
+        done()
+      })
+  })
+})
+
 describe('/GET stations/', () => {
   it('should return error asking for "at" param', done => {
     chai
@@ -65,9 +79,8 @@ describe('/GET stations?at=TIMESTAMP', () => {
           res.should.have.status(200)
           res.body.should.be.an('array')
           res.body[0].should.have.all.keys('at', 'station', 'weather')
+          done()
         })
-
-      done()
     })
   })
 
