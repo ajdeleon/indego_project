@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const cron = require('node-cron')
 const Weather = mongoose.model('weather')
 const Kiosk = mongoose.model('kiosk')
+const CurrentKiosk = mongoose.model('currentKiosk')
 const getWeather = require('./getWeather')
 const getKioskData = require('./getKioskData')
 
@@ -24,6 +25,17 @@ updater = async () => {
     const kioskResult = await Kiosk.insertMany(kioskDataWithRef, {
       ordered: false,
     })
+
+    // separate collection that always contains most recent update
+    if (kioskDataWithRef) {
+      const deleteResult = await CurrentKiosk.deleteMany({})
+      const currentKioskResult = await CurrentKiosk.insertMany(
+        kioskDataWithRef,
+        {
+          ordered: false,
+        }
+      )
+    }
   } catch (err) {
     console.log(err)
   }
