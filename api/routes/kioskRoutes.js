@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Kiosk = mongoose.model('kiosk')
+const CurrentKiosk = mongoose.model('currentKiosk')
 const Weather = mongoose.model('weather')
 const parseParams = require('../middlewares/parseParams')
 const requireAt = require('../middlewares/requireAt')
@@ -9,10 +10,24 @@ module.exports = app => {
     try {
       const kiosks = await Kiosk.find(res.locals.filter)
       // const weather = await Weather.findById(kiosks[0].weather)
-      const weather = await Weather.find(res.locals.filter)
+      const weather = await Weather.findOne(res.locals.filter)
 
       if (kiosks.length === 0)
         return res.status(404).send('No data found for this time period')
+      res.send({
+        at: weather.at,
+        kiosks,
+        weather,
+      })
+    } catch (err) {
+      res.status(422).send(err.message)
+    }
+  })
+
+  app.get('/stations/recent', async (req, res) => {
+    try {
+      const kiosks = await CurrentKiosk.find({})
+      const weather = await Weather.findById(kiosks[0].weather)
       res.send({
         at: weather.at,
         kiosks,
