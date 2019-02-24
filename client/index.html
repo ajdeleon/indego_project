@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Indego Bike Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCltxJMSgsN0sYmxwtjFGGaPegQsjywwTA&libraries=places">
+    </script>
+    <link rel="stylesheet" type="text/css" href="styles.css"></link>
+  </head>
+  <body>
+    <input id="search" type="text" placeholder="Find a bike near: " />
+    <div class="weatherContainer">
+      <div id="weather"></div>
+      <div id="updatedAt"></div>
+    </div>
+    <div id="toggleButtons">
+        <button id="bikesAvailable">Bikes Available</button>
+        <button id="openDocks">Docks Open</button>
+    </div>
+    <div id="map"></div>
+    <script type="text/javascript" src="index.js"></script>
+  </body>
+</html>
