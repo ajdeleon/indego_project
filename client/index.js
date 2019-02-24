@@ -64,7 +64,6 @@ axios.get('http://localhost:4000/stations/recent').then(data => {
     `Updated at: ${formattedDate}`
   )
   updatedAt.appendChild(updatedAtContent)
-  console.log(weatherData)
 })
 
 // map setup
