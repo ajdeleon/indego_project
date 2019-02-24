@@ -4,19 +4,17 @@ let kioskData
 let weatherData
 
 // get data from api and load initial map markers
-axios
-  .get('http://localhost:4000/stations?at=2019-02-16Z07:00:00.000')
-  .then(data => {
-    kioskData = data.data.kiosks
-    weatherData = data.data.weather
+axios.get('http://localhost:4000/stations/recent').then(data => {
+  kioskData = data.data.kiosks
+  weatherData = data.data.weather
 
-    // keep prev window reference so it can be cleared when another is clicked
-    let prev_window = false
+  // keep prev window reference so it can be cleared when another is clicked
+  let prev_window = false
 
-    // create marker and infowindow for each kios returned from api
-    kioskData.forEach(kiosk => {
-      let infowindow = new google.maps.InfoWindow({
-        content: `
+  // create marker and infowindow for each kios returned from api
+  kioskData.forEach(kiosk => {
+    let infowindow = new google.maps.InfoWindow({
+      content: `
         <div>
           <div>${kiosk.name}</div>
           <div>${kiosk.addressStreet}</div>
@@ -28,48 +26,46 @@ axios
           }</span></div>
         </div>
         `,
-      })
-
-      let coords = new google.maps.LatLng(kiosk.latitude, kiosk.longitude)
-      let marker = new google.maps.Marker({
-        position: coords,
-        label: kiosk.bikesAvailable.toString(10),
-        map,
-      })
-      marker.addListener('click', () => {
-        if (prev_window) {
-          prev_window.close()
-        }
-        prev_window = infowindow
-        infowindow.open(map, marker)
-      })
-      markers.push(marker)
     })
 
-    google.maps.event.addListener(map, 'click', () => {
+    let coords = new google.maps.LatLng(kiosk.latitude, kiosk.longitude)
+    let marker = new google.maps.Marker({
+      position: coords,
+      label: kiosk.bikesAvailable.toString(10),
+      map,
+    })
+    marker.addListener('click', () => {
       if (prev_window) {
         prev_window.close()
       }
+      prev_window = infowindow
+      infowindow.open(map, marker)
     })
-    // weather setup
-    const weatherContainer = document.querySelector('.weatherContainer')
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(
-      weatherContainer
-    )
-    const weatherContent = document.createTextNode(`
+    markers.push(marker)
+  })
+
+  google.maps.event.addListener(map, 'click', () => {
+    if (prev_window) {
+      prev_window.close()
+    }
+  })
+  // weather setup
+  const weatherContainer = document.querySelector('.weatherContainer')
+  map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(weatherContainer)
+  const weatherContent = document.createTextNode(`
       ${weatherData.temp}°F - 
       ${weatherData.weather ? weatherData.weather[0].description : null}
     `)
-    weather.appendChild(weatherContent)
+  weather.appendChild(weatherContent)
 
-    const updatedAt = document.getElementById('updatedAt')
-    const formattedDate = new Date(weatherData.updatedAt)
-    const updatedAtContent = document.createTextNode(
-      `Updated at: ${formattedDate}`
-    )
-    updatedAt.appendChild(updatedAtContent)
-    console.log(weatherData)
-  })
+  const updatedAt = document.getElementById('updatedAt')
+  const formattedDate = new Date(weatherData.updatedAt)
+  const updatedAtContent = document.createTextNode(
+    `Updated at: ${formattedDate}`
+  )
+  updatedAt.appendChild(updatedAtContent)
+  console.log(weatherData)
+})
 
 // map setup
 function initMap() {
