@@ -1,0 +1,72 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Always set the map height explicitly to define the size of the div
+* element that contains the map. */
+#map {
+  height: 90%;
+  width: 80%;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#search {
+  font-size: 1.5rem;
+  width: 50%;
+  margin-left: .5rem;
+  margin-top: .5rem;
+  padding: .75rem 0 .75rem .75rem;
+  text-overflow: ellipsis;
+}
+
+#toggleButtons {
+  background-color: #FFF;
+  margin-right: .5rem;
+  margin-top: .5rem;
+}
+
+#bikesAvailable {
+  font-size: 1.5rem;
+  padding: .75rem;
+}
+
+#openDocks {
+  font-size: 1.5rem;
+  padding: .75rem;
+}
+
+.weatherContainer {
+  font-size: 1rem;
+  padding: .75rem;
+  background-color: white;
+  border: 1px solid black;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+@media only screen and (max-width: 700px) {
+  #map {
+    height: 100%;
+    width: 100%;
+  }
+  #search {
+    margin: 0;
+    width: 100%;
+  }
+
+  #toggleButtons {
+    margin-top: 65px;
+  }
+
+
+  #bikesAvailable {
+    font-size: 1rem;
+  }
+  #openDocks {
+    font-size: 1rem;
+  }
+}
