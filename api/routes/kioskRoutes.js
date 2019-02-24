@@ -13,10 +13,10 @@ module.exports = app => {
       const weather = await Weather.findOne(res.locals.filter)
 
       if (kiosks.length === 0)
-        return res.status(404).send('No data found for this time period')
+        return res.status(404).send({ error: 'no suitable data' })
       res.send({
         at: weather.at,
-        kiosks,
+        stations: [...kiosks],
         weather,
       })
     } catch (err) {
@@ -43,10 +43,12 @@ module.exports = app => {
     const kioskId = req.params.id
     try {
       const kiosks = await Kiosk.find({ kioskId, ...res.locals.filter })
+      //have to return early or else trying to get the weather data by id throws error
+      if (kiosks.length === 0)
+        return res.status(404).send({ error: 'no suitable data' })
+
       const weather = await Weather.findById(kiosks[0].weather)
 
-      if (kiosks.length === 0)
-        return res.status(404).send('No data found for this time period')
       //There is a better way to do this.
       if (req.query.frequency === 'daily') {
         const filteredKiosks = kiosks.filter(kiosk => {
@@ -63,7 +65,7 @@ module.exports = app => {
       } else {
         response = {
           at: weather.at,
-          kiosk: [...kiosks],
+          stations: [...kiosks],
           weather,
         }
       }

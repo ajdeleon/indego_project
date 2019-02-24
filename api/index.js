@@ -15,7 +15,7 @@ mongoose.connect(
   'mongodb://localhost:27017/indego',
   { useNewUrlParser: true },
   () => {
-    console.log('Connected to mongo')
+    //    console.log('Connected to mongo')
   }
 )
 
@@ -32,3 +32,5 @@ const port = 4000
 app.listen(port, () => {
   console.log(`Express listening on port ${port}`)
 })
+
+module.exports = app
