@@ -6,6 +6,11 @@ html, body {
 
 /* Always set the map height explicitly to define the size of the div
 * element that contains the map. */
+
+.hidden {
+  display: none;
+}
+
 #map {
   height: 90%;
   width: 80%;
@@ -23,10 +28,19 @@ html, body {
   text-overflow: ellipsis;
 }
 
-#toggleButtons {
+.toggleButtons {
   background-color: #FFF;
   margin-right: .5rem;
   margin-top: .5rem;
+}
+
+.selectedButton {
+  background-color: #dd4b39;
+  text-shadow: 1px 1px black;
+  color: #FFF;
+}
+button {
+  background-color: #FFF;
 }
 
 #bikesAvailable {
@@ -39,6 +53,16 @@ html, body {
   padding: .75rem;
 }
 
+.infowindowHeading {
+  font-weight: bold;
+  color: #282828;
+}
+
+.infowindowNumbers {
+  font-weight: bold;
+  color: #282828;
+}
+
 .weatherContainer {
   font-size: 1rem;
   padding: .75rem;
@@ -46,6 +70,11 @@ html, body {
   border: 1px solid black;
   margin-bottom: 1rem;
   text-align: center;
+}
+
+.dangerousWeather {
+  font-size: 1.5rem;
+  color: orange;
 }
 
 @media only screen and (max-width: 700px) {

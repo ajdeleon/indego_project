@@ -4,67 +4,82 @@ let kioskData
 let weatherData
 
 // get data from api and load initial map markers
-axios.get('http://localhost:4000/stations/recent').then(data => {
-  kioskData = data.data.stations
-  weatherData = data.data.weather
+axios.get('http://localhost:4000/stations/recent').then(
+  data => {
+    kioskData = data.data.stations
+    weatherData = data.data.weather
 
-  // keep prev window reference so it can be cleared when another is clicked
-  let prev_window = false
+    // keep prev window reference so it can be cleared when another is clicked
+    let prev_window = false
 
-  // create marker and infowindow for each kios returned from api
-  kioskData.forEach(kiosk => {
-    let infowindow = new google.maps.InfoWindow({
-      content: `
+    // create marker and infowindow for each kios returned from api
+    kioskData.forEach(kiosk => {
+      let infowindow = new google.maps.InfoWindow({
+        content: `
         <div>
-          <div>${kiosk.name}</div>
+          <div class="infowindowHeading">${kiosk.name}</div>
           <div>${kiosk.addressStreet}</div>
-          <div>Bikes Available: <span style="color: blue; font-weight: bold;">${
+          <div>Bikes Available: <span class="infowindowNumbers">${
             kiosk.bikesAvailable
           }</span></div>
-          <div>Docks open: <span style="color: blue; font-weight: bold;">${
+          <div>Docks open: <span class="infowindowNumbers">${
             kiosk.docksAvailable
           }</span></div>
         </div>
         `,
+      })
+
+      let coords = new google.maps.LatLng(kiosk.latitude, kiosk.longitude)
+      let marker = new google.maps.Marker({
+        position: coords,
+        label: kiosk.bikesAvailable.toString(10),
+        map,
+      })
+      marker.addListener('click', () => {
+        if (prev_window) {
+          prev_window.close()
+        }
+        prev_window = infowindow
+        infowindow.open(map, marker)
+      })
+      markers.push(marker)
     })
 
-    let coords = new google.maps.LatLng(kiosk.latitude, kiosk.longitude)
-    let marker = new google.maps.Marker({
-      position: coords,
-      label: kiosk.bikesAvailable.toString(10),
-      map,
-    })
-    marker.addListener('click', () => {
+    google.maps.event.addListener(map, 'click', () => {
       if (prev_window) {
         prev_window.close()
       }
-      prev_window = infowindow
-      infowindow.open(map, marker)
     })
-    markers.push(marker)
-  })
-
-  google.maps.event.addListener(map, 'click', () => {
-    if (prev_window) {
-      prev_window.close()
-    }
-  })
-  // weather setup
-  const weatherContainer = document.querySelector('.weatherContainer')
-  map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(weatherContainer)
-  const weatherContent = document.createTextNode(`
+    // weather setup
+    const weatherContainer = document.querySelector('.weatherContainer')
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(
+      weatherContainer
+    )
+    const weather = document.getElementById('weather')
+    const weatherContent = document.createTextNode(`
       ${weatherData.temp}°F - 
       ${weatherData.weather ? weatherData.weather[0].description : null}
     `)
-  weather.appendChild(weatherContent)
+    weather.appendChild(weatherContent)
+    if (weatherData.weather[0].description === 'thunderstorm') {
+      weather.classList.add('dangerousWeather')
+    }
 
-  const updatedAt = document.getElementById('updatedAt')
-  const formattedDate = new Date(weatherData.updatedAt)
-  const updatedAtContent = document.createTextNode(
-    `Updated at: ${formattedDate}`
-  )
-  updatedAt.appendChild(updatedAtContent)
-})
+    const updatedAt = document.getElementById('updatedAt')
+    const formattedDate = new Date(weatherData.updatedAt)
+    const updatedAtContent = document.createTextNode(
+      `Updated at: ${formattedDate}`
+    )
+    updatedAt.appendChild(updatedAtContent)
+
+    const body = document.querySelector('body')
+    body.classList.remove('hidden')
+  },
+  () => {
+    const body = document.querySelector('body')
+    body.classList.remove('hidden')
+  }
+)
 
 // map setup
 function initMap() {
@@ -124,7 +139,8 @@ function initMap() {
   })
 
   // toggle buttons setup
-  const form = document.getElementById('toggleButtons')
+
+  const form = document.querySelector('.toggleButtons')
   const toggleButtons = new google.maps.places.SearchBox(form)
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(form)
 
@@ -135,6 +151,8 @@ function initMap() {
         text: kioskData[i].bikesAvailable.toString(),
       })
     })
+    openDocks.classList.remove('selectedButton')
+    bikesAvailable.classList.add('selectedButton')
   })
 
   const openDocks = document.getElementById('openDocks')
@@ -144,6 +162,8 @@ function initMap() {
         text: kioskData[i].docksAvailable.toString(),
       })
     })
+    bikesAvailable.classList.remove('selectedButton')
+    openDocks.classList.add('selectedButton')
   })
 }
 
