@@ -12,10 +12,11 @@ app.use(cors())
 app.use(bodyParser.json())
 
 mongoose.connect(
-  'mongodb://localhost:27017/indego',
-  { useNewUrlParser: true },
-  () => {
-    //    console.log('Connected to mongo')
+  'mongodb://mongodb:27017/indego',
+  { useNewUrlParser: true, reconnectTries: 60, reconnectInterval: 1000 },
+  err => {
+    if (err) console.log(err)
+    console.log('Connected to mongo')
   }
 )
 
@@ -29,8 +30,10 @@ require('./routes/weatherRoutes')(app)
 require('./services/updateDatabase.js')()
 
 const port = 4000
-app.listen(port, () => {
-  console.log(`Express listening on port ${port}`)
-})
+app
+  .listen(port, () => {
+    console.log(`Express listening on port ${port}`)
+  })
+  .on('error', console.log)
 
 module.exports = app

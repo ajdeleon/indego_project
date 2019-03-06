@@ -11,6 +11,12 @@ html, body {
   display: none;
 }
 
+.dim {
+  opacity: 0.5;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
 #map {
   height: 90%;
   width: 80%;

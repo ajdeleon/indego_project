@@ -1,14 +1,22 @@
 version: '3'
 services:
+  client:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    ports:
+      - '80:80'
   api:
+    restart: always
     build:
       dockerfile: Dockerfile.dev
       context: ./api
-    environment:
-        - MONGO_INITDB_ROOT_USERNAME=mongo
-        - MONGO_INITDB_ROOT_PASSWORD=fd78fdsajfke
     ports:
       - '4000:4000'
+    depends_on:
+      - "mongodb"
+    command: ["./wait-for-it.sh", "mongodb:4000", "--", "npm", "run", "start"]
   mongodb:
     build:
       dockerfile: Dockerfile.dev

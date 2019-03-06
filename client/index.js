@@ -4,8 +4,9 @@ let kioskData
 let weatherData
 
 // get data from api and load initial map markers
-axios.get('http://localhost:4000/stations/recent').then(
-  data => {
+axios
+  .get('http://localhost:4000/stations/recent')
+  .then(data => {
     kioskData = data.data.stations
     weatherData = data.data.weather
 
@@ -71,16 +72,17 @@ axios.get('http://localhost:4000/stations/recent').then(
       `Updated at: ${formattedDate}`
     )
     updatedAt.appendChild(updatedAtContent)
-
-    const body = document.querySelector('body')
-    body.classList.remove('hidden')
-  },
-  () => {
-    const body = document.querySelector('body')
-    body.classList.remove('hidden')
-  }
-)
-
+  })
+  .catch(err => {
+    const weatherContainer = document.querySelector('.weatherContainer')
+    const map = document.getElementById('map')
+    const errorMessage = document.createTextNode(
+      'There was an error loading Indego data, please try refreshing the page'
+    )
+    weatherContainer.appendChild(errorMessage)
+    weatherContainer.classList.add('dangerousWeather')
+    map.classList.add('dim')
+  })
 // map setup
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
